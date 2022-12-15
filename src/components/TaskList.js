@@ -13,6 +13,7 @@ const TaskList = (props) => {
           title={task.title}
           isComplete={task.isComplete}
           onUpdate={props.onUpdateTask}
+          onDeleteTask={props.onDeleteTask}
           // send the function onUpdateTask refrence 
           //  from the tasks to the task component 
           // now each task component has a prop named onUpdate
@@ -33,9 +34,10 @@ TaskList.propTypes = {
       isComplete: PropTypes.bool.isRequired,
     })
   ),
-  onUpdateTask: PropTypes.func.isRequired
+  onUpdateTask: PropTypes.func.isRequired,
   // task list now expects a prop named onUpdateTask 
   // whose value is a refrence to a function
+  onDeleteTask: PropTypes.func.isRequired
 };
 
 export default TaskList;

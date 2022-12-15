@@ -39,6 +39,17 @@ function App () {
     // function setTaskData and update it to our 
     // newwly formed tasks array 
   };
+  const deleteTask = (id) => {
+    for (let i=0; i<taskData.length; i++) {
+      if (taskData[i].id === id) {
+        taskData.splice(i, 1);
+      }
+    }
+    const tasks = taskData.map(task => {
+      return task;
+    });
+    setTaskData(tasks);
+  };
 
   return (
     <div className="App">
@@ -46,14 +57,17 @@ function App () {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div>{<TaskList tasks={taskData} 
+        <div>{<TaskList 
+        tasks={taskData} 
         // new prop named onUpdateTask sends function updateTaskData to tasklist
-        onUpdateTask={updateTaskData}/>}</div>
+        onUpdateTask={updateTaskData}
+        onDeleteTask={deleteTask}/>}</div>
       </main>
     </div>
   );
 
 }
+
 // ------------- OLD/ORIGINAL CODE ---------------
 // const TASKS = [
 //   {
