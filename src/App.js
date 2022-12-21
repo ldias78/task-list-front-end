@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
-import axios, { isCancel, AxiosError } from 'axios';
+import axios from 'axios';
 import TaskForm from './components/TaskForm.js';
 
 // make this into a state so we can update taskData
@@ -69,6 +69,7 @@ function App() {
         console.log(error);
       });
   };
+
   const addTask = (taskInfo) => {
     axios
       .post(URL, taskInfo)
@@ -90,7 +91,6 @@ function App() {
         <div>
           <TaskList
             tasks={taskData}
-            // new prop named onUpdateTask sends function updateTaskData to tasklist
             onUpdateTask={updateTaskData}
             onDeleteTask={deleteTask}
           ></TaskList>
@@ -100,33 +100,5 @@ function App() {
     </div>
   );
 }
-
-// ------------- OLD/ORIGINAL CODE ---------------
-// const TASKS = [
-//   {
-//     id: 1,
-//     title: 'Mow the lawn',
-//     isComplete: false,
-//   },
-//   {
-//     id: 2,
-//     title: 'Cook Pasta',
-//     isComplete: true,
-//   },
-// ];
-
-// const App = () => {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <h1>Ada&apos;s Task List</h1>
-//       </header>
-//       <main>
-//         <div>{<TaskList tasks={TASKS} />}</div>
-//       </main>
-//     </div>
-//   );
-// };
-// ------------- OLD/ORIGINAL CODE ---------------
 
 export default App;

@@ -6,7 +6,7 @@ import './Task.css';
 const Task = ({ id, title, isComplete, onUpdateTask, onDeleteTask }) => {
   const buttonClass = isComplete ? 'tasks__item__toggle--completed' : '';
   const completedButtonClick = () => {
-    onUpdateTask(id);
+    onUpdateTask(id, isComplete);
   };
   const deleteTask = () => {
     onDeleteTask(id);
