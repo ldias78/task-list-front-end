@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
-import axios, {isCancel, AxiosError} from 'axios'; 
+import axios, { isCancel, AxiosError } from 'axios';
 
 // make this into a state so we can update taskData
-// and everytime taskData is updated it should 
+// and everytime taskData is updated it should
 // affect the UI and the App component should re-render
-function App () {
-  const [taskData, setTaskData] = useState ([]);
+function App() {
+  const [taskData, setTaskData] = useState([]);
   const URL = 'https://task-list-api-c17.herokuapp.com';
 
   const getTasks = () => {
@@ -19,25 +19,23 @@ function App () {
             id: task.id,
             title: task.title,
             isComplete: task.isComplete,
-          }
+          };
         });
-        setTaskData(newTask);
+        setTaskData(newTasks);
       })
       .catch((error) => {
         console.log(error);
       });
-  }; 
+  };
   useEffect(getTasks, []);
 
-
-  
   const updateTaskData = (id) => {
     axios
       .patch(`${URL}/${id}/mark_completed`)
-      .then (() => {
+      .then(() => {
         const newTasks = [];
         for (const task of taskData) {
-          const newTask = {...task};
+          const newTask = { ...task };
           if (newTask.id === id) {
             newTask.isComplete = !newTask.isComplete;
           }
@@ -48,21 +46,36 @@ function App () {
       .catch((error) => {
         console.log(error);
       });
-    };
+  };
 
-
-  
-  
   const deleteTask = (id) => {
-    for (let i=0; i<taskData.length; i++) {
-      if (taskData[i].id === id) {
-        taskData.splice(i, 1);
-      }
-    }
-    const tasks = taskData.map(task => {
-      return task;
-    });
-    setTaskData(tasks);
+    axios
+      .delete(`${URL}/${id}`)
+      .then(() => {
+        const newTasks = [];
+        for (let i = 0; i < taskData.length; i++) {
+          if (taskData[i].id === id) {
+            taskData.splice(i, 1);
+          } else {
+            newTasks.push(taskData[i]);
+          }
+        }
+        setTaskData(newTasks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const addTask = (taskInfo) => {
+    axios
+      .post(URL, taskInfo)
+      .then((response) => {
+        console.log(response);
+        getTasks();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -71,15 +84,18 @@ function App () {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div>{<TaskList 
-        tasks={taskData} 
-        // new prop named onUpdateTask sends function updateTaskData to tasklist
-        onUpdateTask={updateTaskData}
-        onDeleteTask={deleteTask}/>}</div>
+        <div>
+          <TaskList
+            tasks={taskData}
+            // new prop named onUpdateTask sends function updateTaskData to tasklist
+            onUpdateTask={updateTaskData}
+            onDeleteTask={deleteTask}
+          />
+          <TaskForm addTaskCallback={addTask} />
+        </div>
       </main>
     </div>
   );
-
 }
 
 // ------------- OLD/ORIGINAL CODE ---------------
