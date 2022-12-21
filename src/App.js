@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
 import axios, { isCancel, AxiosError } from 'axios';
+import TaskForm from './components/TaskForm.js';
 
 // make this into a state so we can update taskData
 // and everytime taskData is updated it should
 // affect the UI and the App component should re-render
 function App() {
   const [taskData, setTaskData] = useState([]);
-  const URL = 'https://task-list-api-c17.herokuapp.com';
+  const URL = 'https://task-list-api-c17.herokuapp.com/tasks';
 
   const getTasks = () => {
     axios
@@ -29,9 +30,10 @@ function App() {
   };
   useEffect(getTasks, []);
 
-  const updateTaskData = (id) => {
-    axios
-      .patch(`${URL}/${id}/mark_completed`)
+  const updateTaskData = (id, isComplete) => {
+    if (isComplete) {
+      axios
+      .patch(`${URL}/${id}/mark_complete`)
       .then(() => {
         const newTasks = [];
         for (const task of taskData) {
@@ -46,6 +48,7 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
+    }
   };
 
   const deleteTask = (id) => {
@@ -90,7 +93,7 @@ function App() {
             // new prop named onUpdateTask sends function updateTaskData to tasklist
             onUpdateTask={updateTaskData}
             onDeleteTask={deleteTask}
-          />
+          ></TaskList>
           <TaskForm addTaskCallback={addTask} />
         </div>
       </main>
