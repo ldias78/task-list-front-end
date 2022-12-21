@@ -3,27 +3,23 @@ import PropTypes from 'prop-types';
 import Task from './Task';
 import './TaskList.css';
 // passing in props intead of {tasks}
-const TaskList = (props) => {
-  const getTaskListJSX = (props) => {
-    return props.tasks.map((task) => {
+const TaskList = ({ tasks, onUpdateTask, onDeleteTask }) => {
+  const getTaskListJSX = (tasks) => {
+    return tasks.map((task) => {
       return (
         <Task
           key={task.id}
           id={task.id}
           title={task.title}
+          description={task.isComplete}
           isComplete={task.isComplete}
-          onUpdate={props.onUpdateTask}
-          onDeleteTask={props.onDeleteTask}
-          // send the function onUpdateTask refrence 
-          //  from the tasks to the task component 
-          // now each task component has a prop named onUpdate
-          // the value of onUpdate is whatever we pass in a prop.onUpdateTask
-          // which we expect to be a refrence to our updateTaskData function 
+          onUpdate={onUpdateTask}
+          onDeleteTask={onDeleteTask}
         />
       );
     });
   };
-  return <ul className="tasks__list no-bullet">{getTaskListJSX(props)}</ul>;
+  return <ul className="tasks__list no-bullet">{getTaskListJSX(tasks)}</ul>;
 };
 
 TaskList.propTypes = {
@@ -31,13 +27,14 @@ TaskList.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
-      isComplete: PropTypes.bool.isRequired,
+      isComplete: PropTypes.bool,
+      description: PropTypes.string,
     })
-  ),
+  ).isRequired,
   onUpdateTask: PropTypes.func.isRequired,
-  // task list now expects a prop named onUpdateTask 
+  // task list now expects a prop named onUpdateTask
   // whose value is a refrence to a function
-  onDeleteTask: PropTypes.func.isRequired
+  onDeleteTask: PropTypes.func.isRequired,
 };
 
 export default TaskList;
