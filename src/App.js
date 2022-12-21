@@ -1,44 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
+import axios, {isCancel, AxiosError} from 'axios'; 
 
 // make this into a state so we can update taskData
 // and everytime taskData is updated it should 
 // affect the UI and the App component should re-render
 function App () {
-  const [taskData, setTaskData] = useState ([{
-    id: 1,
-    title: 'Mow the lawn',
-    isComplete: false,
-  },
-  {
-    id: 2,
-    title: 'Cook Pasta',
-    isComplete: true,
-  }]);
-  // creating function to update taskData in App
-  // this way react will see the changes and trigger a 
-  // re-render 
-  const updateTaskData = (updatedTask) => {
-    // updatedTask is in one argument which holds updated task data
-    const tasks = taskData.map(task => {
-      // create helper array to hold updated task data
-      // map over taskData
-      // inside map we reference each item with task
-      if (task.id === updatedTask.id) {
-        // of we find a task id updatedTask is updating...
-        return updatedTask;
-        // the item should map into our tasks array as the updated task data
-      } else {
-        return task;
-        // otherwise map the unchaged task into tasks 
-      }
-    });
-    setTaskData(tasks);
-    // we update the taskData in our state by using our
-    // function setTaskData and update it to our 
-    // newwly formed tasks array 
-  };
+  const [taskData, setTaskData] = useState ([]);
+  const URL = 'https://task-list-api-c17.herokuapp.com';
+
+  const getTasks = () => {
+    axios
+      .get(URL)
+      .then((response) => {
+        const newTasks = response.data.map((task) => {
+          return {
+            id: task.id,
+            title: task.title,
+            isComplete: task.isComplete,
+          }
+        });
+        setTaskData(newTask);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }; 
+  useEffect(getTasks, []);
+
+
+  
+  const updateTaskData = (id) => {
+    axios
+      .patch(`${URL}/${id}/mark_completed`)
+      .then (() => {
+        const newTasks = [];
+        for (const task of taskData) {
+          const newTask = {...task};
+          if (newTask.id === id) {
+            newTask.isComplete = !newTask.isComplete;
+          }
+          newTasks.push(newTask);
+        }
+        setTaskData(newTasks);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    };
+
+
+  
+  
   const deleteTask = (id) => {
     for (let i=0; i<taskData.length; i++) {
       if (taskData[i].id === id) {
