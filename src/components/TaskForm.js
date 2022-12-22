@@ -27,21 +27,21 @@ const TaskForm = (props) => {
 
   return (
     <form onSubmit={submitForm}>
-      <label htmlFor='title'>Title</label>
+      <label htmlFor="title">Title</label>
       <input
-        type = "text"
-        name = "title"
-        value = {formData.title}
-        onChange = {updateForm}
+        type="text"
+        name="title"
+        value={formData.title}
+        onChange={updateForm}
       />
-      <label htmlFor='description'>Description</label>
+      <label htmlFor="description">Description</label>
       <input
-        type = "text"
-        name = "description"
-        value = {formData.description}
-        onChange = {updateForm}
+        type="text"
+        name="description"
+        value={formData.description}
+        onChange={updateForm}
       />
-      <input type="submit" value= "Add Task" />
+      <input type="submit" value="Add Task" />
     </form>
   );
 };

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import TaskList from './components/TaskList.js';
 import './App.css';
 import axios from 'axios';
@@ -19,6 +20,7 @@ function App() {
           return {
             id: task.id,
             title: task.title,
+            description: task.description,
             isComplete: task.isComplete,
           };
         });
@@ -30,9 +32,8 @@ function App() {
   };
   useEffect(getTasks, []);
 
-  const updateTaskData = (id, isComplete) => {
-    if (isComplete) {
-      axios
+  const updateTaskData = (id) => {
+    axios
       .patch(`${URL}/${id}/mark_complete`)
       .then(() => {
         const newTasks = [];
@@ -48,7 +49,6 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-    }
   };
 
   const deleteTask = (id) => {
@@ -93,7 +93,7 @@ function App() {
             tasks={taskData}
             onUpdateTask={updateTaskData}
             onDeleteTask={deleteTask}
-          ></TaskList>
+          />
           <TaskForm addTaskCallback={addTask} />
         </div>
       </main>
